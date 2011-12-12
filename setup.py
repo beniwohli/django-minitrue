@@ -13,7 +13,7 @@ setup(
     install_requires = [
         'django-load>=1.0.0',
         'django-classy-tags>=0.3.4.1',
-        'django>=1.3',
+        'django>=1.2',
     ],
     package_data={
         'mailchimp': [
