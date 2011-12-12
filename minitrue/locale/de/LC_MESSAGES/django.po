@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-02 09:04+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: admin.py:50 templates/minitrue/search_and_replace.html:132
+msgid "Search and Replace"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:60
+msgid "Term to search for"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:65
+msgid "Term to repleace the search term with"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:68
+msgid "Case sensitive"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:70
+msgid "Whether this search and replace should be case sensitive or not"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:73
+msgid "Search"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:86
+msgid "Matches"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:91
+msgid "Replace All"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:93
+msgid "Field"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:94
+msgid "Old"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:95
+#: templates/minitrue/search_and_replace.html:105
+msgid "Context"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:102
+msgid "Replace"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:117
+msgid "Results"
+msgstr ""
+
+#: templates/minitrue/search_and_replace.html:131
+msgid "Home"
+msgstr ""

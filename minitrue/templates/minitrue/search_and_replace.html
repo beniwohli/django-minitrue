@@ -1,0 +1,138 @@
+{% extends "admin/change_form.html" %}
+{% load adminmedia admin_list i18n minitrue_tags %}
+
+{% block extrastyle %}
+  {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
+    <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+    {% url admin:jsi18n as jsi18nurl %}
+    <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+    {{ media.css }}
+    <style type="text/css">
+      #id_term_label,#id_replacement_label {width:18px;}
+      fieldset.searchbar div div p.help { padding-left:0px; padding-right:0px; margin-left:28px; }
+      fieldset.searchbar div div.case_sensitive p.help {margin-left:0px;}
+      fieldset.searchbar div div.case_sensitive label, fieldset.searchbar div div.case_sensitive input { height: 19px; }
+      fieldset.searchbar div div.case_sensitive label { margin-top: 3px; }
+      fieldset table {width:100%;}
+      fieldset.collapsed h2 span.counter {display:inline !important;}
+      table.resultlist th.short {width:100px;}
+      #results td {display:inline-block; width:50%;}
+      span.match {color: #f00; font-weight:bold;}
+      span.match-replaced {color: #0f0; font-weight:bold;}
+      button {cursor:pointer;}
+    </style>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+    <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+    <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.init.js"></script>
+    <script type="text/javascript" src="{% admin_media_prefix %}js/collapse.min.js"></script>
+    {% if STATIC_URL %}
+        <script type="text/javascript" src="{{ STATIC_URL }}minitrue/js/searchandreplace.js"></script>
+    {% else %}
+        <script type="text/javascript" src="{{ MEDIA_URL }}minitrue/js/searchandreplace.js"></script>
+    {% endif %}
+    <script type="text/javascript">
+    (function($) {
+        $(document).ready(function($) {
+            $.fn.SearchAndReplace({
+                'replace-url': '{% url admin:minitrue_searchandreplace_replace %}',
+                'replace-all-url': '{% url admin:minitrue_searchandreplace_replace_all %}',
+                'replacement': '{{ replacement }}'
+            });
+        });
+    })(django.jQuery);
+    </script>
+{% endblock %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% block coltype %}flex{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <div style="display:none;"><form>{% csrf_token %}</form></div>
+    <form method="get" action="." id="changelist-search">
+      {% block search %}
+      <fieldset class="module aligned general searchbar">
+        <div class="form-row">
+          <div class="field-box term">
+            <label for="id_term" class="required" id="id_term_label"><img alt="Search" src="{% admin_media_prefix %}img/admin/icon_searchbox.png" /></label>
+            {{ form.term }}
+            <p class="help" id="term_help">{% trans "Term to search for" %}</p>
+          </div>
+          <div class="field-box replacement">
+            <label for="id_replacement" class="inline" id="id_replacement_label">&#x2192;</label>
+            {{ form.replacement }}
+            <p class="help" id="replacement_help">{% trans "Term to repleace the search term with" %}</p>
+          </div>
+          <div class="field-box case_sensitive">
+            <label for="id_case_sensitive" class="inline">{% trans "Case sensitive" %}</label>
+            {{ form.case_sensitive }}
+            <p class="help">{% trans "Whether this search and replace should be case sensitive or not" %}</p>
+          </div>
+          <div class="field-box submit">
+            <input type="submit" value="{% trans "Search" %}">
+          </div>
+        </div>
+      </fieldset>
+      {% endblock %}
+      
+      {% result_counter as global_counter %}
+      
+      {% block result_list %}
+        {% if results %}
+	        {% for info,matches in results %}
+		        {% if matches %}
+			        <fieldset class="module aligned collapse" id="{{ info.app_label }}-{{ info.verbose_name }}">
+			            <h2>{{ info.verbose_name|title }} in {{ info.app_label|title }} (<span class="counter" id="{{ info.app_label }}-{{ info.object_name }}-counter">{{ matches|length }}</span> {% trans "Matches" %})</h2> 
+			            <table cellspacing="0" class="resultlist" id="result_list-{{ info.object_name|lower }}-{{ info.app_label }}">
+			                <thead>
+				                <tr>
+				                    <th class="short">
+				                       <button class="replace-all-link" value="{{ info.app_label }}::{{ info.object_name|lower }}::{{ info.term }}::{{ info.replacement }}::{{ info.case_sensitive|yesno:'1,0' }}">{% trans "Replace All" %}</button>
+				                    </th>
+				                    <th class="short">{% trans "Field" %}</th>
+				                    <th>{% trans "Old" %}</th>
+				                    <th class="short">{% trans "Context" %}</th>
+				                </tr>
+			                </thead>
+			                <tbody>
+			                {% for match in matches %}
+				                {{ global_counter.incr }}
+				                <tr class="{% cycle 'row1' 'row2' %}">
+				                    <td><button class="replace-link" value="{{ match.app }}::{{ match.model }}::{{ match.pk }}::{{ match.field }}::{{ match.term }}::{{ match.replacement }}::{{ match.case_sensitive|yesno:'1,0' }}">{% trans "Replace" %}</button></td>
+				                    <td>{{ match.field }}</td>
+				                    <td>{% spaceless %}{% render_match_bits match.matchiter %}{% endspaceless %}</td>
+				                    <td>{% if match.url %}<a href="{{ match.url }}">{% trans "Context" %}</a>{% else %}-{% endif %}</td>
+				                </tr>
+			                {% endfor %}
+			                </tbody>
+			            </table>
+			        </fieldset>
+		        {% endif %}
+	        {% endfor %}
+        {% endif %}
+      {% endblock %}
+      
+	  <div class="submit-row">
+	    <p class="deletelink-box"><span id="globalcounter">{{ global_counter.value }}</span> {% trans "Results" %}</a>
+	    </p>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+
+{% block object-tools %}{% endblock %}
+{% block date_hierarchy %}{% endblock %}
+{% block filters %}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+     <a href="{% url admin:index %}">{% trans "Home" %}</a> &rsaquo;
+     {% trans "Search and Replace" %}
+</div>
+{% endblock %}
