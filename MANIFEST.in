@@ -1,0 +1,4 @@
+include README.rst
+include LICENSE
+recursive-include minitrue/templates *
+recursive-include minitrue/locale *

@@ -1,0 +1,7 @@
+*.pyc
+*.pyo
+.pydevproject
+.project
+.idea
+django_minitrue.egg-info
+dist
