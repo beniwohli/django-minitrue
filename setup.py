@@ -10,7 +10,11 @@ setup(
     url = 'http://github.com/piquadrat/django-minitrue',
     packages = find_packages(),
     zip_safe=False,
-    install_requires = ('django-load','django-classy-tags'),
+    install_requires = [
+        'django-load>=1.0.0',
+        'django-classy-tags>=0.3.4.1',
+        'django>=1.2',
+    ],
     package_data={
         'mailchimp': [
             'templates/minitrue/*.html',
